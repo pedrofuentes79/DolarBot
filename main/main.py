@@ -1,5 +1,5 @@
-from main.scraper import get_blue
-from main.send_message import send_message
+from scraper import get_blue
+from send_message import send_message
 import os
 
 CHAT_IDS = [os.environ.get("TELEGRAM_CHAT_ID")]
