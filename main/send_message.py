@@ -9,6 +9,5 @@ def send_message(buy, sell, chat_id):
 
     #response with message data
     response = requests.get(url).json()
-    print(response)
     msg_id = str(response['result']['message_id'])           
     return response, msg_id
