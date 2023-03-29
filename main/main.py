@@ -1,5 +1,5 @@
-from scraper import get_blue
-from send_message import send_message
+from main.scraper import get_blue
+from main.send_message import send_message
 
 CHAT_IDS = ["5586625183"]
 
