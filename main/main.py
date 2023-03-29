@@ -1,7 +1,8 @@
 from main.scraper import get_blue
 from main.send_message import send_message
+import os
 
-CHAT_IDS = ["5586625183"]
+CHAT_IDS = [os.environ.get("TELEGRAM_CHAT_ID")]
 
 def main():
     #gets buy and sell values
