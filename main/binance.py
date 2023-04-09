@@ -13,7 +13,7 @@ def get_p2p_ars_price(mercado_pago=True):
     for i in range(len(sellers)):
         price = sellers[i]["adv"]["price"]
         for j in sellers[i]["adv"]["tradeMethods"]:
-            if j["identifier"] == "MercadoPagoNew":
-                return int(price)
+            if mercado_pago and (j["identifier"] == "MercadoPagoNew"):
+                return price
             
 print(type(get_p2p_ars_price()))
