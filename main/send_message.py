@@ -6,7 +6,7 @@ import pytz
 
 dolar_scraper_token = os.environ.get("TELEGRAM_API_DOLAR_SCRAPER_TOKEN")
 
-def send_message(buy, sell, chat_id):
+def send_message(sell: str, chat_id: str):
     #Gets formatted time info
     actual_time = datetime.now(tz=pytz.timezone("America/Argentina/Buenos_Aires"))
     formatted_time = actual_time.strftime("%d/%m %H:%M")
