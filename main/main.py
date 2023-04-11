@@ -9,7 +9,7 @@ def main():
     buy, sell = get_blue()
     #sends the message to the chat ids
     for chat_id in CHAT_IDS:
-        send_message(buy, sell, chat_id)
+        send_message(sell, chat_id)
 
 if __name__ == "__main__":
     main()
