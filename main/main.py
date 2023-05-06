@@ -13,7 +13,7 @@ def lambda_handler(event, context):
     usdt = get_p2p_ars_price(mercado_pago=True)
     
     #Sends the message to the chat id
-    response, msg_id = send_message(usdt, blue, CHAT_ID, DOLAR_SCRAPER_TOKEN)
+    response, msg_id = send_message(blue, usdt, CHAT_ID, DOLAR_SCRAPER_TOKEN)
     
     print(response)    
     return {
