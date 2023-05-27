@@ -1,8 +1,7 @@
 from lambda_invokers.ReadDynamoDB_invoker import ReadDynamoDB_invoker
 import json
 
-
-def get_up_down_emoji(date_str: str, current_price_usdt: int, current_price_blue: int):
+def get_last_prices(date_str: str):
     #gets last entries
     last_entry_blue = ReadDynamoDB_invoker(table_name="blue_prices", date_str=date_str, limit=1)
     last_entry_usdt = ReadDynamoDB_invoker(table_name="usdt_prices", date_str=date_str, limit=1)
@@ -14,6 +13,12 @@ def get_up_down_emoji(date_str: str, current_price_usdt: int, current_price_blue
     #string to float
     last_price_blue= float(last_price_blue_str)
     last_price_usdt = float(last_price_usdt_str)
+    
+    return last_price_blue, last_price_usdt
+
+def get_up_down_emoji(date_str: str, current_price_usdt: int, current_price_blue: int):
+
+    last_price_blue, last_price_usdt = get_last_prices(date_str=date_str)
     
     emoji_blue: str
     emoji_usdt: str
