@@ -11,11 +11,11 @@ def send_message(blue: str, usdt: str, chat_id: str, token: str, date_str: str):
     message_formatted_time = actual_time.strftime("%d/%m %H:%M")
     
     #Up/Down emoji
-    emoji = get_up_down_emoji(date_str=date_str
-                              current_price_blue=blue, 
-                              current_price_usdt=usdt)
+    emojis = get_up_down_emoji(date_str=date_str,
+                               current_price_blue=float(blue), 
+                               current_price_usdt=float(usdt))
     
-    msg = message_formatted_time + "\n" + "Blue: $" + blue + "\n" + "USDT: $" + usdt
+    msg = message_formatted_time + "\n" + "Blue: $" + blue + emojis[0] +"\n" + "USDT: $" + usdt + emojis[1]
     url = 'https://api.telegram.org/bot' + token + '/sendMessage?chat_id=' + chat_id + '&parse_mode=Markdown&text=' + msg
 
     #response with message data
