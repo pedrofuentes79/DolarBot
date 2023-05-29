@@ -1,21 +1,24 @@
 import requests
-import dateutil.tz
-from datetime import datetime
-from lib.last_price_utils import get_up_down_emoji
+from lib.last_price_utils import get_emojis
+from lib.date_utils import get_message_formatted_date
 
 
 
 def send_message(blue: str, usdt: str, chat_id: str, token: str, date_str: str):
-    #Gets formatted time info for the message (could put this into the date_utils.py module)
-    actual_time = datetime.now(tz=dateutil.tz.gettz("America/Argentina/Buenos_Aires"))
-    message_formatted_time = actual_time.strftime("%d/%m %H:%M")
     
+    #gets specific format for current date
+    message_formatted_date = get_message_formatted_date(date_str)
+
     #Up/Down emoji
-    emojis = get_up_down_emoji(date_str=date_str,
-                               current_price_blue=float(blue), 
-                               current_price_usdt=float(usdt))
+    blue_emoji, usdt_emoji = get_emojis(date_str=date_str,
+                                        current_price_blue=float(blue), 
+                                        current_price_usdt=float(usdt))
     
-    msg = message_formatted_time + "\n" + "Blue: $" + blue + emojis[0] +"\n" + "USDT: $" + usdt + emojis[1]
+
+    #puts together all the pieces to form the final message string
+    msg = message_formatted_date + "\n" + "Blue: $" + blue + blue_emoji +"\n" + "USDT: $" + usdt + usdt_emoji
+    
+    #puts together all the pieces to form the telegram url
     url = 'https://api.telegram.org/bot' + token + '/sendMessage?chat_id=' + chat_id + '&parse_mode=Markdown&text=' + msg
 
     #response with message data
