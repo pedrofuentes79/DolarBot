@@ -7,6 +7,14 @@ def get_formatted_date():
     date_str = now.strftime("%d.%m.%Y:%H.%M")
     
     return date_str
+    
+    
+def get_message_formatted_date(date_str):
+    #This functions returns the reformatted date_str with a specific format
+    
+    response = datetime.datetime.strptime(date_str, "%d.%m.%Y:%H.%M")
+    response = response.strftime("%d.%m.%Y:%H.%M")
+    return response
 
 def get_one_hour_less(date_str):
 
