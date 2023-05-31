@@ -24,11 +24,19 @@ def get_one_hour_less(date_str):
 
     # Parse the input time string into a datetime object
     input_time = datetime.datetime.strptime(date_str, input_format)
+    
+    
+    # Round the minutes to 0
+    rounded_input_time = input_time.replace(minutes=0)
 
-    # Subtract one hour from the input time
-    output_time = input_time - datetime.timedelta(hours=1)
-
-    # Format the output time as a string
-    output_str = output_time.strftime(output_format)
+    if rounded_input_time.hour == 9:
+        # Substract 19 hours, so as to make it 16.00 from the day before
+        output_time = rounded_input_time - datetime.timedelta(hours=19)
+    else:
+        # Subtract one hour from the input time
+        output_time = rounded_input_time - datetime.timedelta(hours=1)
+    
+        # Format the output time as a string
+        output_str = output_time.strftime(output_format)
 
     return output_str
