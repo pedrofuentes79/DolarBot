@@ -1,53 +1,60 @@
 import datetime
 import dateutil.tz
 
-# Define market opening and closing times
-opening = 9
-closing = 16
+# Define market opening and closing hours
+opening = 10
+closing = 17
 
 def get_formatted_date():
+    # This function returns the rounded actual time 
+    # with the format used throughout all the backend for datetime strings
     
     now = datetime.datetime.now(tz=dateutil.tz.gettz("America/Argentina/Buenos_Aires"))
-    date_str = now.strftime("%d.%m.%Y:%H.%M")
+    rounded_now = now.replace(minute=0, second=0, microsecond=0)
     
-    return date_str
+    date_str = rounded_now.strftime("%d.%m.%Y:%H.%M")
+    date_int = int(rounded_now.timestamp())
+
+    
+    return date_str, date_int
     
     
 def get_message_formatted_date(date_str):
-    #This functions returns the reformatted date_str with a specific format
+    #This function returns the reformatted date_str with a specific format
     
-    response = datetime.datetime.strptime(date_str, "%d.%m.%Y:%H.%M")
-    response = response.strftime("%d/%m")
-    return response
+    dt = datetime.datetime.strptime(date_str, "%d.%m.%Y:%H.%M")
+    dt = dt.strftime("%d/%m")
+    
+    return dt
 
 def get_one_hour_less(date_str):    
     
-    #define global variables
+    # Define global variables
     global opening, closing
-    
     
     # Define the input and output format
     input_format = "%d.%m.%Y:%H.%M"
     output_format = "%d.%m.%Y:%H.%M"
-
-    # Parse the input time string into a datetime object
-    input_time = datetime.datetime.strptime(date_str, input_format)
     
+    if type(date_str) == datetime.datetime:
+        input_time = date_str
+    else: 
+        # Parse the input time string into a datetime object
+        input_time = datetime.datetime.strptime(date_str, input_format)
     
-    # Round the minutes to 0
-    rounded_input_time = input_time.replace(minute=0)
 
-    if rounded_input_time.hour == opening:
+    if input_time.hour == opening:
         # Substract the difference needed to reach the previous day's closing time
-        output_time = rounded_input_time - datetime.timedelta(hours=opening-closing+24)
+        output_time = input_time - datetime.timedelta(hours=opening-closing+24)
     else:
         # Subtract one hour from the input time
-        output_time = rounded_input_time - datetime.timedelta(hours=1)
+        output_time = input_time - datetime.timedelta(hours=1)
     
         # Format the output time as a string
-        output_str = output_time.strftime(output_format)
+        # output_str = output_time.strftime(output_format)
 
-    return output_str
+    return output_time
+    
 
 
 
@@ -56,9 +63,8 @@ def is_closing_time(date_str):
     global closing
     
     dt = datetime.datetime.strptime(date_str, "%d.%m.%Y:%H.%M")
-    rounded_input_time = dt.replace(minute=0)
     
-    return rounded_input_time.hour == closing
+    return dt.hour == closing
 
 
 def is_opening_time(date_str):
@@ -66,7 +72,6 @@ def is_opening_time(date_str):
     global opening
     
     dt = datetime.datetime.strptime(date_str, "%d.%m.%Y:%H.%M")
-    rounded_input_time = dt.replace(minute=0)
-    
-    return rounded_input_time.hour == opening
+
+    return dt.hour == opening
     
