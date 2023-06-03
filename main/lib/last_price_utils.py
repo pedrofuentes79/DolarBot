@@ -11,8 +11,8 @@ def get_previous_prices(date_str: str):
     
     #gets last prices
     try:
-        last_price_blue_str = json.loads(last_entry_blue["body"])["Items"][0]["price"]
-        last_price_usdt_str = json.loads(last_entry_usdt["body"])["Items"][0]["price"]
+        last_price_blue_str = json.loads(last_entry_blue["body"])["Item"]["price"]
+        last_price_usdt_str = json.loads(last_entry_usdt["body"])["Item"]["price"]
     except IndexError:
         last_price_blue_str = "0"
         last_price_usdt_str = "0"
@@ -23,6 +23,11 @@ def get_previous_prices(date_str: str):
     last_price_usdt = float(last_price_usdt_str)
     
     return last_price_blue, last_price_usdt
+
+
+
+
+
 
 def get_emojis(date_str: str, current_price_usdt: int, current_price_blue: int):
 
