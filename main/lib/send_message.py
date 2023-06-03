@@ -4,15 +4,15 @@ from lib.date_utils import get_message_formatted_date, is_opening_time, is_closi
 
 
 
-def send_message(blue: str, usdt: str, chat_id: str, token: str, date_str: str):
+def send_message(blue: str, usdt: str, date_str: str, chat_id: str, token: str):
     #gets specific format for current date
     message_formatted_date = get_message_formatted_date(date_str)
 
     #initialize msg according to opening/closing times
     if is_opening_time(date_str):
-        msg = "APERTURA" + message_formatted_date +"\n"
+        msg = "APERTURA " + message_formatted_date +"\n"
     elif is_closing_time(date_str):
-        msg = "CLAUSURA" + message_formatted_date +"\n"
+        msg = "CLAUSURA " + message_formatted_date +"\n"
     else:
         msg = ""
     
