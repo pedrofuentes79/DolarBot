@@ -11,7 +11,7 @@ import json
 
 def lambda_handler(event, context):
     #Keys
-    CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID")
+    CHAT_ID = os.environ.get("TELEGRAM_CHANNEL_ID")
     DOLAR_SCRAPER_TOKEN = os.environ.get("TELEGRAM_API_DOLAR_SCRAPER_TOKEN")
     
     #Gets sell values
@@ -26,7 +26,7 @@ def lambda_handler(event, context):
     WriteDynamoDB_invoker(date_int=date_int, date_str=date_str, price=usdt, type_of_value="sell", table_name="usdt_prices")
     
     #Sends the message to the chat id
-    response, msg_id = send_message(blue, usdt, date_str, CHAT_ID, DOLAR_SCRAPER_TOKEN)
+    response = send_message(blue, usdt, date_str, CHAT_ID, DOLAR_SCRAPER_TOKEN)
     
     print(response)    
     return {
