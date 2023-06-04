@@ -1,32 +1,24 @@
 import boto3
 import json
-from lib.date_utils import get_one_hour_less
 
-#this doesn't actually invoke a lambda function. I realized it was much easier to do it all in the same function.
-#i believe I will temporarily mantain the WriteDynamoDB_invoker but in the future it might be easier to do it all in the same function
-
-
-def ReadDynamoDB_invoker(table_name: str, date_str: str, limit: int=1):
+def ReadDynamoDB_invoker(table_name, dt):
     '''
-    Given a date_str, this function returns the entry that corresponds
-    with the previous entry relative to that date_str
+    Given a dt object, this function returns the entry that corresponds 
+    with the date_int of that dt object
     '''
     dynamodb = boto3.resource('dynamodb', region_name='us-east-2')
     table_name = table_name
     
     table = dynamodb.Table(table_name)
-    
-    last_entry_date = get_one_hour_less(date_str)
-    last_entry_date_int = int(last_entry_date.timestamp())
+        
+    date_int = int(dt.timestamp())
 
+    #example 
     response = table.get_item(
         Key={
-            'unix_date': last_entry_date_int
+            'unix_date': date_int
         },
         ProjectionExpression="price"
         )
     
-    return {
-        'statusCode': 200,
-        'body': json.dumps(response)
-    }
+    return response
