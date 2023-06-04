@@ -4,18 +4,15 @@ import json
 
 def get_previous_prices(date_str: str):
     
-    previous_date_str = get_one_hour_less(date_str)
+    previous_date = get_one_hour_less(date_str)
+    
     #gets last entries
-    last_entry_blue = ReadDynamoDB_invoker(table_name="blue_prices", date_str=previous_date_str, limit=1)
-    last_entry_usdt = ReadDynamoDB_invoker(table_name="usdt_prices", date_str=previous_date_str, limit=1)
+    last_entry_blue = ReadDynamoDB_invoker(table_name="blue_prices", dt=previous_date)
+    last_entry_usdt = ReadDynamoDB_invoker(table_name="usdt_prices", dt=previous_date)
     
     #gets last prices
-    try:
-        last_price_blue_str = json.loads(last_entry_blue["body"])["Item"]["price"]
-        last_price_usdt_str = json.loads(last_entry_usdt["body"])["Item"]["price"]
-    except IndexError:
-        last_price_blue_str = "0"
-        last_price_usdt_str = "0"
+    last_price_blue_str = last_entry_blue["Item"]["price"]
+    last_price_usdt_str = last_entry_usdt["Item"]["price"]
         
     
     #string to float
@@ -23,10 +20,6 @@ def get_previous_prices(date_str: str):
     last_price_usdt = float(last_price_usdt_str)
     
     return last_price_blue, last_price_usdt
-
-
-
-
 
 
 def get_emojis(date_str: str, current_price_usdt: int, current_price_blue: int):
