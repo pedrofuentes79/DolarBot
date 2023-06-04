@@ -29,14 +29,19 @@ def get_message_formatted_date(date_str):
 
 def get_one_hour_less(date_str):    
     
+    '''
+    Returns a datetime.datetime object with the Argentina timezone.
+    The response will be the input - 1 hour in most cases, except cases such as
+    hours coinciding with opening times.
+    '''
+    
     # Define global variables
     global opening, closing
     
-    # Define the input and output format
+    # Define the input format
     input_format = "%d.%m.%Y:%H.%M"
-    output_format = "%d.%m.%Y:%H.%M"
-    
-    if type(date_str) == datetime.datetime:
+
+    if isinstance(date_str, datetime.datetime):
         input_time = date_str
     else: 
         # Parse the input time string into a datetime object
@@ -44,15 +49,24 @@ def get_one_hour_less(date_str):
     
 
     if input_time.hour == opening:
-        # Substract the difference needed to reach the previous day's closing time
-        output_time = input_time - datetime.timedelta(hours=opening-closing+24)
+        # Case monday at opening time
+        if input_time.weekday() == 0:
+            # substract two days (to make it friday) and the hours required to make it closing time
+            output_time = input_time - datetime.timedelta(days=2, hours=opening-closing+24)
+            
+        # Case Tuesday, Wednesday, Thursday, Friday at opening time
+        else:
+            # Substract the difference needed to reach the previous day's closing time
+            output_time = input_time - datetime.timedelta(hours=opening-closing+24)
     else:
         # Subtract one hour from the input time
         output_time = input_time - datetime.timedelta(hours=1)
     
         # Format the output time as a string
         # output_str = output_time.strftime(output_format)
-
+    
+    #add tz info
+    output_time = output_time.replace(tzinfo=dateutil.tz.gettz("America/Argentina/Buenos_Aires"))
     return output_time
     
 
@@ -74,4 +88,5 @@ def is_opening_time(date_str):
     dt = datetime.datetime.strptime(date_str, "%d.%m.%Y:%H.%M")
 
     return dt.hour == opening
+    
     
