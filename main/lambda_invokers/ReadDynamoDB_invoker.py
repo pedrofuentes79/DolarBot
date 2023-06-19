@@ -13,7 +13,6 @@ def ReadDynamoDB_invoker(table_name, dt):
         
     date_int = int(dt.timestamp())
 
-    #example 
     response = table.get_item(
         Key={
             'unix_date': date_int
