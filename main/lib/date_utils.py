@@ -88,5 +88,3 @@ def is_opening_time(date_str):
     dt = datetime.datetime.strptime(date_str, "%d.%m.%Y:%H.%M")
 
     return dt.hour == opening
-    
-    
