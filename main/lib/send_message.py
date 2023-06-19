@@ -12,7 +12,7 @@ def send_message(blue: str, usdt: str, date_str: str, chat_id: str, token: str):
     if is_opening_time(date_str):
         msg = "APERTURA " + message_formatted_date +"\n"
     elif is_closing_time(date_str):
-        msg = "CLAUSURA " + message_formatted_date +"\n"
+        msg = "CIERRE " + message_formatted_date +"\n"
     else:
         msg = ""
     
@@ -29,4 +29,5 @@ def send_message(blue: str, usdt: str, date_str: str, chat_id: str, token: str):
     #response with message data
     response = requests.get(url).json()
     msg_id = str(response['result']['message_id'])           
-    return response, msg_id
+    return response
+
