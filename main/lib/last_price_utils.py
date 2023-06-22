@@ -1,5 +1,5 @@
 from lambda_invokers.ReadDynamoDB_invoker import ReadDynamoDB_invoker
-from lib.date_utils import get_one_hour_less
+from lib.date_utils import get_one_hour_less, get_opening_dt
 import json
 
 def get_previous_prices(date_str: str):
@@ -38,3 +38,14 @@ def get_emojis(date_str: str, current_price_usdt: int, current_price_blue: int):
     else:                                        emoji_usdt = "📉"
     
     return emoji_blue, emoji_usdt
+
+def get_closing_emoji(opening: float, closing:float):
+    if closing < opening: return "📉"
+    elif closing > opening: return "📈"
+    else: return "🟰"
+
+def get_blue_opening_value(date_str: str):
+    opening_dt = get_opening_dt(date_str)
+    opening_value = ReadDynamoDB_invoker("blue_prices", opening_dt)["Item"]["price"]
+    return opening_value
+    
