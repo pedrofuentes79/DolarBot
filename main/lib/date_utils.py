@@ -69,7 +69,10 @@ def get_one_hour_less(date_str):
     output_time = output_time.replace(tzinfo=dateutil.tz.gettz("America/Argentina/Buenos_Aires"))
     return output_time
     
-
+def get_opening_dt(date_str):
+    current_dt = datetime.datetime.strptime(date_str, "%d.%m.%Y:%H.%M")
+    opening_dt = current_dt.replace(hour=opening, tzinfo=dateutil.tz.gettz("America/Argentina/Buenos_Aires"))
+    return opening_dt
 
 
 def is_closing_time(date_str):
