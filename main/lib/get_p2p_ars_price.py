@@ -35,5 +35,5 @@ def get_p2p_ars_price(mercado_pago=True):
     # Calculate mean price rounded to 2 decimals
     mean_price = round(np.mean(prices), 2)
     
-    return mean_price
+    return str(mean_price)
 
