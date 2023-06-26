@@ -5,7 +5,7 @@ DolarBot is a simple Telegram bot that provides hourly information about currenc
 ## Features
 
 - Retrieves the "blue" values for buy and sell in Argentina via the dolarsi API.
-- Retrieves the price of 1 USDT in ARS from Binance's P2P platform using the criptoya.com API.
+- Retrieves the price of 1 USDT in ARS from Binance's P2P platform using the criptoya.com API. 
 - Sends users a short message with the latest currency values.
 - Compares previous prices with current ones with an emoji embedded in the message.
 
@@ -37,6 +37,22 @@ The bot can be deployed in multiple ways. One option is to run the `main.py` scr
 Alternatively, you can deploy it as an AWS Lambda function to run it periodically. This is the implementation I chose due to ease of use.
 
 Feel free to explore and extend the functionality of the bot by adding more currency values, such as the official exchange rate, "Dólar Bolsa", "Dólar MEP", etc. based on your specific requirements.
+
+## Clarifications
+DolarBot retrieves the price of 1 USDT in ARS from Binance's P2P platform using the criptoya.com API. It is important to note that the bot does not simply retrieve the cheapest price available. The exact method for selecting the USDT price is as follows:
+
+1) The bot queries the criptoya.com API to fetch the available USDT prices from Binance's P2P platform.
+2) The bot selects the first 5 sellers that meet the following requirements:
+    - They offer MercadoPago as a payment method.
+    - They have at least 50 USDT available to sell.
+    - The minimum amount per transaction is 30,000 AR$ or less.
+3) The prices from the selected sellers are collected.
+4) The bot calculates the average of the selected prices.
+5) The calculated average price is returned as the USDT price.
+6) If there are no sellers that meet the requirements, the previous price is repeated.
+
+This approach ensures that the USDT price obtained by DolarBot represents a reasonable value based on the specified criteria. By averaging the prices from multiple sellers who meet the requirements, the bot provides a more reliable and competitive price for users.
+
 
 ## Contributions
 

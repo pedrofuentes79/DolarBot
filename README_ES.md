@@ -38,6 +38,21 @@ Como alternativa, puedes implementarlo como una función AWS Lambda para ejecuta
 
 El usuario es libre de explorar y ampliar la funcionalidad del bot agregando más valores de divisas, como la cotización oficial, "Dólar Bolsa", "Dólar MEP", etc., según las necesidades específicas.
 
+## Aclaraciones
+DolarBot obtiene el precio de 1 USDT en ARS desde la plataforma P2P de Binance utilizando la API de criptoya.com. Es importante tener en cuenta que el bot no simplemente obtiene el precio más barato disponible. El método exacto para seleccionar el precio de USDT es el siguiente:
+
+1) El bot consulta la API de criptoya.com para obtener los precios disponibles de USDT desde la plataforma P2P de Binance.
+2) El bot selecciona los primeros 5 vendedores que cumplen con los siguientes requisitos:
+    - Ofrecen MercadoPago como método de pago.
+    - Tienen al menos 50 USDT disponibles.
+    - El mínimo por transacción es menor o igual a 30,000 AR$.
+3) Se recopilan los precios de los vendedores seleccionados.
+4) El bot calcula el promedio de los precios seleccionados.
+5) El precio promedio calculado se devuelve como el precio de USDT.
+6) Si no hay vendedores que cumplan con los requisitos, se repite el precio anterior.
+
+Este enfoque asegura que el precio de USDT obtenido por DolarBot represente un valor razonable basado en los criterios especificados. Al promediar los precios de varios vendedores que cumplen con los requisitos, el bot proporciona un precio más confiable y competitivo para los usuarios.
+
 ## Contribuciones
 
 Se aceptan contribuciones al proyecto DolarBot. Si tienes alguna sugerencia, informe de errores o deseas contribuir con nuevas características, no dudes en abrir un problema o enviar una solicitud de extracción.
