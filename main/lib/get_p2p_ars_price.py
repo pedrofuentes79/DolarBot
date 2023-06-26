@@ -1,6 +1,6 @@
 import requests
 import numpy as np
-from last_price_utils import get_previous_prices
+from lib.last_price_utils import get_previous_prices
 
 
 def get_p2p_ars_price(mercado_pago:bool, date_str:str):
