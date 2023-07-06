@@ -4,7 +4,7 @@ DolarBot is a simple Telegram bot that provides hourly information about currenc
 
 ## Features
 
-- Retrieves the "blue" values for buy and sell in Argentina via the dolarsi API.
+- Retrieves the "blue" values for buy and sell in Argentina via Bluelytics.
 - Retrieves the price of 1 USDT in ARS from Binance's P2P platform using the criptoya.com API. 
 - Sends users a short message with the latest currency values.
 - Compares previous prices with current ones with an emoji embedded in the message.
@@ -13,7 +13,7 @@ DolarBot is a simple Telegram bot that provides hourly information about currenc
 
 DolarBot utilizes the following APIs:
 
-- [dolarsi API](https://www.dolarsi.com/): Provides the "blue" exchange rate values for buy and sell in Argentina.
+- [Bluelytics API](https://bluelytics.com.ar/#!/api): Provides exchange rate values for buy and sell in Argentina.
 - [criptoya.com API](https://criptoya.com/): Retrieves the price of 1 USDT in ARS from Binance's P2P platform.
 
 ## Packages

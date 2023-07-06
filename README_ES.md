@@ -4,7 +4,7 @@ DolarBot es un bot de Telegram simple que brinda información cada hora sobre pr
 
 ## Funcionalidades
 
-- Obtiene los valores de compra y venta del "dólar blue" en Argentina a través de la API de dolarsi.
+- Obtiene los valores de compra y venta del "dólar blue" en Argentina a través de Bluelytics.
 - Recupera el precio de 1 USDT en ARS desde la plataforma P2P de Binance utilizando la API de criptoya.com.
 - Envía a los usuarios un mensaje corto con los últimos valores de las divisas.
 - Compara el precio actual con el anterior mediante un emoji en cada mensaje.
@@ -13,7 +13,7 @@ DolarBot es un bot de Telegram simple que brinda información cada hora sobre pr
 
 DolarBot utiliza las siguientes APIs:
 
-- [API de dolarsi](https://www.dolarsi.com/): Devuelve los valores de compra y venta del "dólar blue" en Argentina.
+- [API de Bluelytics](https://bluelytics.com.ar/#!/api): Devuelve los valores de distintos tipos de cambio para el dólar en argentina.
 - [API de criptoya.com](https://criptoya.com/): Obtiene el precio de 1 USDT en ARS desde la plataforma P2P de Binance.
 
 ## Packages
