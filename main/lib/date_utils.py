@@ -33,21 +33,20 @@ def get_one_hour_less(date_str):
     Returns a datetime.datetime object with the Argentina timezone.
     The response will be the input - 1 hour in most cases, except cases such as
     hours coinciding with opening times.
+    This function assumes the date_str will be in the format "%d.%m.%Y:%H.%M"
+    It also assumes the minutes, seconds and microseconds in the date_str will be 0.
     '''
-    
-    # Define global variables
-    global opening, closing
     
     # Define the input format
     input_format = "%d.%m.%Y:%H.%M"
-
+    
+    # Check data type
     if isinstance(date_str, datetime.datetime):
         input_time = date_str
     else: 
         # Parse the input time string into a datetime object
         input_time = datetime.datetime.strptime(date_str, input_format)
     
-
     if input_time.hour == opening:
         # Case monday at opening time
         if input_time.weekday() == 0:
@@ -58,12 +57,47 @@ def get_one_hour_less(date_str):
         else:
             # Substract the difference needed to reach the previous day's closing time
             output_time = input_time - datetime.timedelta(hours=opening-closing+24)
+            
+    # Cases outside of market hours
+    # Case before opening time
+    elif input_time.hour < opening:
+
+        #Case Monday
+        if input_time.weekday() == 0:
+            # substract three days (to make it friday) and set hours to closing time
+            output_time = input_time.replace(hour=closing) - datetime.timedelta(days=3)
+
+        # Case Tuesday, Wednesday, Thursday, Friday, Saturday
+        elif input_time.weekday() <= 5:
+            # substract one day and set hours to closing time
+            output_time = input_time.replace(hour=closing) - datetime.timedelta(days=1)
+
+        # Case Sunday
+        else:
+            # substract two days (to make it friday) and set hours to closing time
+            output_time = input_time.replace(hour=closing) - datetime.timedelta(days=2)
+
+    elif input_time.hour > closing:
+
+        # Case Monday, Tuesday, Wednesday, Thursday, Friday
+        if input_time.weekday() <= 4:
+            # replace hours with closing time
+            output_time = input_time.replace(hour=closing)
+
+        # Case Saturday
+        elif input_time.weekday() == 5:
+            # substract one day and set hours to closing time
+            output_time = input_time.replace(hour=closing) - datetime.timedelta(days=1)
+
+        # Case Sunday
+        else:
+            # substract two days (to make it friday) and set hours to closing time
+            output_time = input_time.replace(hour=closing) - datetime.timedelta(days=2)
+
+    # Case within market hours
     else:
         # Subtract one hour from the input time
         output_time = input_time - datetime.timedelta(hours=1)
-    
-        # Format the output time as a string
-        # output_str = output_time.strftime(output_format)
     
     #add tz info
     output_time = output_time.replace(tzinfo=dateutil.tz.gettz("America/Argentina/Buenos_Aires"))
