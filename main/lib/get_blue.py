@@ -1,14 +1,18 @@
 import requests
 
 def get_blue():
-    url = "https://www.dolarsi.com/api/api.php?type=dolar"
+    url = "https://api.bluelytics.com.ar/v2/latest"
     #gets dollar request in json format
     response = requests.get(url).json()
-    blue_buy = response[1]["casa"]["compra"]
-    blue_sell = response[1]["casa"]["venta"]
+    blue_buy = str(response["blue"]["value_buy"])
+    blue_sell = str(response["blue"]["value_sell"])
     
-    #reformats the values so that they end with two decimals and use . instead of , for decimals
-    blue_buy = blue_buy[:-4] + ".00"
-    blue_sell = blue_sell[:-4] + ".00"
+    # there must be two digits "after the point"
+    # eg: "492.00"
+    
+    if len(blue_buy.split(".")[1]) == 1:
+        blue_buy += "0"
+    if len(blue_sell.split(".")[1]) == 1:
+        blue_sell += "0"
     
     return blue_buy, blue_sell
