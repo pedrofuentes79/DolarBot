@@ -108,6 +108,18 @@ def get_opening_dt(date_str):
     opening_dt = current_dt.replace(hour=opening, tzinfo=dateutil.tz.gettz("America/Argentina/Buenos_Aires"))
     return opening_dt
 
+def holiday(date_str):
+    holidays = ["21.08.2023:00.00", "13.10.2023:00.00", "16.10.2023:00.00", "20.11.2023:00.00", "8.12.2023:00.00", "25.12.2023:00.00", "01.01.2024:00.00"]
+    
+    # format holidays to datetime
+    for i in range(len(holidays)):
+        holidays[i] = datetime.datetime.strptime(holidays[i], "%d.%m.%Y:%H.%M")
+    
+    current_dt = datetime.datetime.strptime(date_str, "%d.%m.%Y:%H.%M")
+    current_dt = current_dt.replace(hour=0, minute=0)
+
+    # check if current date is a holiday
+    return current_dt in holidays
 
 def is_closing_time(date_str):
     #define global variables

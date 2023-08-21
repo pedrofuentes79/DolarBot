@@ -7,7 +7,7 @@ def get_blue():
     blue_buy = str(response["blue"]["value_buy"])
     blue_sell = str(response["blue"]["value_sell"])
     
-    # there must be two digits "after the point"
+    # there must be two digits after the decimalpoint
     # eg: "492.00"
     
     if len(blue_buy.split(".")[1]) == 1:
