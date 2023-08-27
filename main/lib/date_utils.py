@@ -137,3 +137,36 @@ def is_opening_time(date_str):
     dt = datetime.datetime.strptime(date_str, "%d.%m.%Y:%H.%M")
 
     return dt.hour == opening
+
+
+def is_friday_last_hour(dt):
+    #define global variables
+    global closing
+
+    return dt.hour == closing and dt.weekday() == 4 
+
+def is_end_month(dt):
+    #define global variables
+    global closing
+
+    if dt.hour == closing:
+        # cases for months with 31 days
+        if dt.month in [1, 3, 5, 7, 8, 10, 12]:
+            #if its the 31st or the last market day of the month
+            return (dt.day == 31) or (dt.weekday() == 4 and dt.day in [29, 30])
+        
+        #cases for months with 30 days
+        elif dt.month in [4, 6, 9, 11]:
+            return (dt.day == 30) or (dt.weekday() == 4 and dt.day in [28, 29])
+        
+        #case for february with 28 days
+        elif dt.month == 2 and dt.year % 4 != 0:
+            return (dt.day == 28) or (dt.weekday() == 4 and dt.day in [26,27])
+        
+        #case for february with 29 days
+        elif dt.month == 2 and dt.year % 4 == 0:
+            return (dt.day == 29) or (dt.weekday() == 4 and dt.day in [27,28])
+        else:
+            return False
+    else:
+        return False
