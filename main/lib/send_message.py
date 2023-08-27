@@ -1,4 +1,4 @@
-from requests import get
+import requests
 from lib.last_price_utils import get_emojis, get_blue_opening_value, get_closing_emoji
 from lib.date_utils import get_message_formatted_date, is_opening_time, is_closing_time
 
@@ -25,7 +25,7 @@ def send_message(blue: str, usdt: str, date_str: str, chat_id: str, token: str):
     url = 'https://api.telegram.org/bot' + token + '/sendMessage?chat_id=' + chat_id + '&parse_mode=Markdown&text=' + msg
 
     #response with message data
-    response = get(url).json()
+    response = requests.get(url).json()
     
     #sends special closing message
     if is_closing_time(date_str):
@@ -39,9 +39,17 @@ def send_message(blue: str, usdt: str, date_str: str, chat_id: str, token: str):
         #puts pieces together and sends the message
         msg = "CIERRE " + message_formatted_date + blue_emoji_closing +"\n"  + "APERTURA: " + blue_opening + " -> CIERRE: " + blue
         url = 'https://api.telegram.org/bot' + token + '/sendMessage?chat_id=' + chat_id + '&parse_mode=Markdown&text=' + msg
-        response = get(url).json()
+        response = requests.get(url).json()
     
     return response
 
 
+def send_chart(buffer, token, chat_id):
+    # Send chart to telegram
+    url = 'https://api.telegram.org/bot' + token + '/sendPhoto?chat_id=' + chat_id + '&parse_mode=Markdown'
+
+    # Send buffer to telegram
+    files = {'photo': buffer.getvalue()}
+    response = requests.post(url, files=files)
+    return response
     
