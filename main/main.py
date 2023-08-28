@@ -2,7 +2,8 @@ from lib.get_blue import get_blue
 from lib.date_utils import get_formatted_date, holiday, is_friday_last_hour, is_end_month
 from lib.send_message import send_message, send_chart
 from lib.get_p2p_ars_price import get_p2p_ars_price
-from lib.chart import get_weekly_chart
+from lib.chart import get_weekly_chart, get_monthly_chart
+from lib.get_chart_data import get_weekly_data, get_monthly_data
 
 from lambda_invokers.WriteDynamoDB_invoker import WriteDynamoDB_invoker
 
@@ -18,21 +19,22 @@ def lambda_handler(event, context):
     
 
     
-    #formatted date string
-    date_str, date_int = get_formatted_date()
+    #formatted dates
+    date_dt, date_str, date_int = get_formatted_date()
 
-    date = datetime.datetime.strptime(date_str, "%d.%m.%Y:%H.%M")
-
-    if is_friday_last_hour(date):
-        chart_buffer = get_weekly_chart()
-        response_chart = send_chart(chart_buffer, DOLAR_SCRAPER_TOKEN, CHAT_ID)
+    if is_friday_last_hour(date_dt):
+        weekly_data = get_weekly_data("blue_prices", date_str)
+        weekly_chart_buffer = get_weekly_chart(weekly_data)
+        response_chart = send_chart(weekly_chart_buffer, DOLAR_SCRAPER_TOKEN, CHAT_ID)
         print(response_chart)
         
-    if is_end_month(date):
-        # send monthly chart
-        pass
+    if is_end_month(date_dt):
+        monthly_data = get_monthly_data("blue_prices", date_str)
+        monthly_chart_buffer = get_monthly_chart(monthly_data)
+        response_monthly_chart = send_chart(monthly_chart_buffer, DOLAR_SCRAPER_TOKEN, CHAT_ID)
+        print(response_monthly_chart)
 
-    
+    # NEED TO CHANGE ALL DATE FUNCTIONS TO RECEIVE DT OBJECTS INSTEAD OF DATE_STR
     if not holiday(date_str):
         #Gets sell values
         _, blue = get_blue()
