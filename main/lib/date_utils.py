@@ -15,8 +15,7 @@ def get_formatted_date():
     date_str = rounded_now.strftime("%d.%m.%Y:%H.%M")
     date_int = int(rounded_now.timestamp())
 
-    
-    return date_str, date_int
+    return rounded_now, date_str, date_int
     
     
 def get_message_formatted_date(date_str):
