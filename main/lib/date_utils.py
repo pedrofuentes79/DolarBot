@@ -2,8 +2,8 @@ import datetime
 import pytz
 
 # Define market opening and closing hours
-opening = 10
-closing = 17
+OPENING = 10
+CLOSING = 17
 
 def get_formatted_date():
     # This function returns the rounded actual time 
@@ -31,52 +31,52 @@ def get_one_hour_less(date_dt):
     It also assumes the minutes, seconds and microseconds in the date_dt will be 0.
     '''
     
-    if date_dt.hour == opening:
+    if date_dt.hour == OPENING:
         # Case monday at opening time
         if date_dt.weekday() == 0:
             # substract two days (to make it friday) and the hours required to make it closing time
-            output_time = date_dt - datetime.timedelta(days=2, hours=opening-closing+24)
+            output_time = date_dt - datetime.timedelta(days=2, hours=OPENING-CLOSING+24)
             
         # Case Tuesday, Wednesday, Thursday, Friday at opening time
         else:
             # Substract the difference needed to reach the previous day's closing time
-            output_time = date_dt - datetime.timedelta(hours=opening-closing+24)
+            output_time = date_dt - datetime.timedelta(hours=OPENING-CLOSING+24)
             
     # Cases outside of market hours
     # Case before opening time
-    elif date_dt.hour < opening:
+    elif date_dt.hour < OPENING:
 
         #Case Monday
         if date_dt.weekday() == 0:
             # substract three days (to make it friday) and set hours to closing time
-            output_time = date_dt.replace(hour=closing) - datetime.timedelta(days=3)
+            output_time = date_dt.replace(hour=CLOSING) - datetime.timedelta(days=3)
 
         # Case Tuesday, Wednesday, Thursday, Friday, Saturday
         elif date_dt.weekday() <= 5:
             # substract one day and set hours to closing time
-            output_time = date_dt.replace(hour=closing) - datetime.timedelta(days=1)
+            output_time = date_dt.replace(hour=CLOSING) - datetime.timedelta(days=1)
 
         # Case Sunday
         else:
             # substract two days (to make it friday) and set hours to closing time
-            output_time = date_dt.replace(hour=closing) - datetime.timedelta(days=2)
+            output_time = date_dt.replace(hour=CLOSING) - datetime.timedelta(days=2)
 
-    elif date_dt.hour > closing:
+    elif date_dt.hour > CLOSING:
 
         # Case Monday, Tuesday, Wednesday, Thursday, Friday
         if date_dt.weekday() <= 4:
             # replace hours with closing time
-            output_time = date_dt.replace(hour=closing)
+            output_time = date_dt.replace(hour=CLOSING)
 
         # Case Saturday
         elif date_dt.weekday() == 5:
             # substract one day and set hours to closing time
-            output_time = date_dt.replace(hour=closing) - datetime.timedelta(days=1)
+            output_time = date_dt.replace(hour=CLOSING) - datetime.timedelta(days=1)
 
         # Case Sunday
         else:
             # substract two days (to make it friday) and set hours to closing time
-            output_time = date_dt.replace(hour=closing) - datetime.timedelta(days=2)
+            output_time = date_dt.replace(hour=CLOSING) - datetime.timedelta(days=2)
 
     # Case within market hours
     else:
@@ -86,7 +86,7 @@ def get_one_hour_less(date_dt):
     return output_time
     
 def get_opening_dt(date_dt):
-    return date_dt.replace(hour=opening)
+    return date_dt.replace(hour=OPENING)
 
 def holiday(date_dt):
     # this can be improved by storing the holidays in a database instead of hardcoding them
@@ -104,25 +104,25 @@ def holiday(date_dt):
 
 def is_closing_time(date_dt):
     #define global variables
-    global closing
-    return date_dt.hour == closing
+    global CLOSING
+    return date_dt.hour == CLOSING
 
 def is_opening_time(date_dt):
     #define global variables
-    global opening
-    return date_dt.hour == opening
+    global OPENING
+    return date_dt.hour == OPENING
 
 def is_friday_last_hour(dt):
     #define global variables
-    global closing
+    global CLOSING
 
-    return dt.hour == closing and dt.weekday() == 4 
+    return dt.hour == CLOSING and dt.weekday() == 4 
 
 def is_end_month(dt):
     #define global variables
-    global closing
+    global CLOSING
 
-    if dt.hour == closing:
+    if dt.hour == CLOSING:
         # cases for months with 31 days
         if dt.month in [1, 3, 5, 7, 8, 10, 12]:
             #if its the 31st or the last market day of the month
