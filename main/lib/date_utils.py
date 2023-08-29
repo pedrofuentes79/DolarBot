@@ -16,8 +16,7 @@ def get_formatted_date():
     date_int = int(rounded_now.timestamp())
 
     return rounded_now, date_str, date_int
-    
-    
+        
 def get_message_formatted_date(date_str):
     #This function returns the reformatted date_str with a specific format
     
@@ -128,7 +127,6 @@ def is_closing_time(date_str):
     
     return dt.hour == closing
 
-
 def is_opening_time(date_str):
     #define global variables
     global opening
@@ -136,7 +134,6 @@ def is_opening_time(date_str):
     dt = datetime.datetime.strptime(date_str, "%d.%m.%Y:%H.%M")
 
     return dt.hour == opening
-
 
 def is_friday_last_hour(dt):
     #define global variables
@@ -169,3 +166,33 @@ def is_end_month(dt):
             return False
     else:
         return False
+
+def get_month_spanish(dt):
+    month = dt.month
+
+    if month == 1:
+        return "Enero"
+    elif month == 2:
+        return "Febrero"
+    elif month == 3:
+        return "Marzo"
+    elif month == 4:
+        return "Abril"
+    elif month == 5:
+        return "Mayo"
+    elif month == 6:
+        return "Junio"
+    elif month == 7:
+        return "Julio"
+    elif month == 8:
+        return "Agosto"
+    elif month == 9:
+        return "Septiembre"
+    elif month == 10:
+        return "Octubre"
+    elif month == 11:
+        return "Noviembre"
+    elif month == 12:
+        return "Diciembre"
+    else:
+        return "Error"
