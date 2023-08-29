@@ -4,9 +4,7 @@ from datetime import datetime as dt
 from main.lib.get_chart_data import get_weekly_data, get_monthly_data
 import pytz
 from date_utils import get_month_spanish
-
-OPENING = 10
-CLOSING = 17
+from constants import OPENING, CLOSING
 
 
 def get_weekly_chart(data):

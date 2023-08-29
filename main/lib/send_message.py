@@ -2,8 +2,6 @@ import requests
 from lib.last_price_utils import get_emojis, get_blue_opening_value, get_closing_emoji
 from lib.date_utils import get_message_formatted_date, is_opening_time, is_closing_time
 
-
-
 def send_message(blue, usdt, date_dt, chat_id, token):
     
     #gets specific format for current date

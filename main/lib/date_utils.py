@@ -1,9 +1,6 @@
 import datetime
 import pytz
-
-# Define market opening and closing hours
-OPENING = 10
-CLOSING = 17
+from constants import OPENING, CLOSING
 
 def get_formatted_date():
     # This function returns the rounded actual time 

@@ -1,6 +1,5 @@
 from lambda_invokers.ReadDynamoDB_invoker import ReadDynamoDB_invoker
 from lib.date_utils import get_one_hour_less, get_opening_dt
-import json
 
 def get_previous_prices(date_dt):
     

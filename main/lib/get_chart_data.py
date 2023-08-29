@@ -1,10 +1,7 @@
 import boto3
 from datetime import datetime as dt
 import pytz
-
-#Constants
-OPENING = 10
-CLOSING = 17
+from constants import OPENING, CLOSING
 
 def get_weekly_data(table_name, date_friday):
     dynamodb = boto3.resource('dynamodb', region_name="us-east-2")
