@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 from io import BytesIO
 from datetime import datetime as dt
-from main.lib.get_chart_data import get_weekly_data, get_monthly_data
+from lib.get_chart_data import get_weekly_data, get_monthly_data
 import pytz
 from date_utils import get_month_spanish
 from constants import OPENING, CLOSING
@@ -40,6 +40,7 @@ def get_weekly_chart(data):
     plt.close()
     
     return buffer    
+
 def get_monthly_chart(data):
     # sort the data by timestamp
     data.sort(key=lambda x: x["unix_date"])
