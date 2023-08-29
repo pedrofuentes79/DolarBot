@@ -3,7 +3,7 @@ import numpy as np
 from lib.last_price_utils import get_previous_prices
 
 
-def get_p2p_ars_price(mercado_pago:bool, date_str:str):
+def get_p2p_ars_price(mercado_pago, date_dt):
     '''
     Returns the lowest price for buying USDT with ARS and MercadoPago as a payment method
     through Binance's P2P.
@@ -41,6 +41,6 @@ def get_p2p_ars_price(mercado_pago:bool, date_str:str):
         return str(mean_price)
     else:
         # If there are no sellers, repeat the previous price.
-        _, last_price_usdt = get_previous_prices(date_str=date_str)
+        _, last_price_usdt = get_previous_prices(date_dt)
         return last_price_usdt
 

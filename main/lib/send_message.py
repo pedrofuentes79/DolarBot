@@ -4,19 +4,19 @@ from lib.date_utils import get_message_formatted_date, is_opening_time, is_closi
 
 
 
-def send_message(blue: str, usdt: str, date_str: str, chat_id: str, token: str):
+def send_message(blue, usdt, date_dt, chat_id, token):
     
     #gets specific format for current date
-    message_formatted_date = get_message_formatted_date(date_str)
+    message_formatted_date = get_message_formatted_date(date_dt)
     
     #initialize values
-    if is_opening_time(date_str):
+    if is_opening_time(date_dt):
         msg = "APERTURA " + message_formatted_date +"\n"
     else:
         msg = ""
     
     #gets emojis according to previous price
-    blue_emoji, usdt_emoji = get_emojis(date_str=date_str, current_price_blue=float(blue), current_price_usdt=float(usdt))
+    blue_emoji, usdt_emoji = get_emojis(date_dt=date_dt, current_price_blue=float(blue), current_price_usdt=float(usdt))
     
     #puts together all the pieces to form the final message string
     msg += "Blue: $" + blue + blue_emoji +"\n" + "USDT: $" + usdt + usdt_emoji
@@ -28,10 +28,10 @@ def send_message(blue: str, usdt: str, date_str: str, chat_id: str, token: str):
     response = requests.get(url).json()
     
     #sends special closing message
-    if is_closing_time(date_str):
+    if is_closing_time(date_dt):
         
         #gets the opening value from this day
-        blue_opening = get_blue_opening_value(date_str)
+        blue_opening = get_blue_opening_value(date_dt)
         
         #gets the emoji for the day
         blue_emoji_closing = get_closing_emoji(opening=float(blue_opening), closing=float(blue))

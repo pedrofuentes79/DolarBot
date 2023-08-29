@@ -1,5 +1,5 @@
 import datetime
-import dateutil.tz
+import pytz
 
 # Define market opening and closing hours
 opening = 10
@@ -9,7 +9,7 @@ def get_formatted_date():
     # This function returns the rounded actual time 
     # with the format used throughout all the backend for datetime strings
     
-    now = datetime.datetime.now(tz=dateutil.tz.gettz("America/Argentina/Buenos_Aires"))
+    now = datetime.datetime.now(tz=pytz.timezone("America/Argentina/Buenos Aires"))
     rounded_now = now.replace(minute=0, second=0, microsecond=0)
     
     date_str = rounded_now.strftime("%d.%m.%Y:%H.%M")
@@ -17,123 +17,100 @@ def get_formatted_date():
 
     return rounded_now, date_str, date_int
         
-def get_message_formatted_date(date_str):
+def get_message_formatted_date(date_dt):
     #This function returns the reformatted date_str with a specific format
-    
-    dt = datetime.datetime.strptime(date_str, "%d.%m.%Y:%H.%M")
-    dt = dt.strftime("%d/%m")
-    
-    return dt
+    return date_dt.strftime("%d/%m")
 
-def get_one_hour_less(date_str):    
+def get_one_hour_less(date_dt):    
     
     '''
     Returns a datetime.datetime object with the Argentina timezone.
     The response will be the input - 1 hour in most cases, except cases such as
     hours coinciding with opening times.
-    This function assumes the date_str will be in the format "%d.%m.%Y:%H.%M"
-    It also assumes the minutes, seconds and microseconds in the date_str will be 0.
+    This function assumes the date_dt is a datetime object with tzinfo.
+    It also assumes the minutes, seconds and microseconds in the date_dt will be 0.
     '''
     
-    # Define the input format
-    input_format = "%d.%m.%Y:%H.%M"
-    
-    # Check data type
-    if isinstance(date_str, datetime.datetime):
-        input_time = date_str
-    else: 
-        # Parse the input time string into a datetime object
-        input_time = datetime.datetime.strptime(date_str, input_format)
-    
-    if input_time.hour == opening:
+    if date_dt.hour == opening:
         # Case monday at opening time
-        if input_time.weekday() == 0:
+        if date_dt.weekday() == 0:
             # substract two days (to make it friday) and the hours required to make it closing time
-            output_time = input_time - datetime.timedelta(days=2, hours=opening-closing+24)
+            output_time = date_dt - datetime.timedelta(days=2, hours=opening-closing+24)
             
         # Case Tuesday, Wednesday, Thursday, Friday at opening time
         else:
             # Substract the difference needed to reach the previous day's closing time
-            output_time = input_time - datetime.timedelta(hours=opening-closing+24)
+            output_time = date_dt - datetime.timedelta(hours=opening-closing+24)
             
     # Cases outside of market hours
     # Case before opening time
-    elif input_time.hour < opening:
+    elif date_dt.hour < opening:
 
         #Case Monday
-        if input_time.weekday() == 0:
+        if date_dt.weekday() == 0:
             # substract three days (to make it friday) and set hours to closing time
-            output_time = input_time.replace(hour=closing) - datetime.timedelta(days=3)
+            output_time = date_dt.replace(hour=closing) - datetime.timedelta(days=3)
 
         # Case Tuesday, Wednesday, Thursday, Friday, Saturday
-        elif input_time.weekday() <= 5:
+        elif date_dt.weekday() <= 5:
             # substract one day and set hours to closing time
-            output_time = input_time.replace(hour=closing) - datetime.timedelta(days=1)
+            output_time = date_dt.replace(hour=closing) - datetime.timedelta(days=1)
 
         # Case Sunday
         else:
             # substract two days (to make it friday) and set hours to closing time
-            output_time = input_time.replace(hour=closing) - datetime.timedelta(days=2)
+            output_time = date_dt.replace(hour=closing) - datetime.timedelta(days=2)
 
-    elif input_time.hour > closing:
+    elif date_dt.hour > closing:
 
         # Case Monday, Tuesday, Wednesday, Thursday, Friday
-        if input_time.weekday() <= 4:
+        if date_dt.weekday() <= 4:
             # replace hours with closing time
-            output_time = input_time.replace(hour=closing)
+            output_time = date_dt.replace(hour=closing)
 
         # Case Saturday
-        elif input_time.weekday() == 5:
+        elif date_dt.weekday() == 5:
             # substract one day and set hours to closing time
-            output_time = input_time.replace(hour=closing) - datetime.timedelta(days=1)
+            output_time = date_dt.replace(hour=closing) - datetime.timedelta(days=1)
 
         # Case Sunday
         else:
             # substract two days (to make it friday) and set hours to closing time
-            output_time = input_time.replace(hour=closing) - datetime.timedelta(days=2)
+            output_time = date_dt.replace(hour=closing) - datetime.timedelta(days=2)
 
     # Case within market hours
     else:
         # Subtract one hour from the input time
-        output_time = input_time - datetime.timedelta(hours=1)
+        output_time = date_dt - datetime.timedelta(hours=1)
     
-    #add tz info
-    output_time = output_time.replace(tzinfo=dateutil.tz.gettz("America/Argentina/Buenos_Aires"))
     return output_time
     
-def get_opening_dt(date_str):
-    current_dt = datetime.datetime.strptime(date_str, "%d.%m.%Y:%H.%M")
-    opening_dt = current_dt.replace(hour=opening, tzinfo=dateutil.tz.gettz("America/Argentina/Buenos_Aires"))
-    return opening_dt
+def get_opening_dt(date_dt):
+    return date_dt.replace(hour=opening)
 
-def holiday(date_str):
+def holiday(date_dt):
+    # this can be improved by storing the holidays in a database instead of hardcoding them
     holidays = ["21.08.2023:00.00", "13.10.2023:00.00", "16.10.2023:00.00", "20.11.2023:00.00", "8.12.2023:00.00", "25.12.2023:00.00", "01.01.2024:00.00"]
     
-    # format holidays to datetime
+    # format holidays to datetime, add tzinfo and replace seconds and microseconds with 0 to match the format of date_dt
     for i in range(len(holidays)):
-        holidays[i] = datetime.datetime.strptime(holidays[i], "%d.%m.%Y:%H.%M")
+        holidays[i] = datetime.datetime.strptime(holidays[i], "%d.%m.%Y:%H.%M").replace(
+                                                                                second=0, 
+                                                                                microsecond=0, 
+                                                                                tzinfo=pytz.timezone("America/Argentina/Buenos_Aires"))
     
-    current_dt = datetime.datetime.strptime(date_str, "%d.%m.%Y:%H.%M")
-    current_dt = current_dt.replace(hour=0, minute=0)
-
     # check if current date is a holiday
-    return current_dt in holidays
+    return date_dt in holidays
 
-def is_closing_time(date_str):
+def is_closing_time(date_dt):
     #define global variables
     global closing
-    
-    dt = datetime.datetime.strptime(date_str, "%d.%m.%Y:%H.%M")
-    
-    return dt.hour == closing
+    return date_dt.hour == closing
 
-def is_opening_time(date_str):
+def is_opening_time(date_dt):
     #define global variables
     global opening
-    
-    dt = datetime.datetime.strptime(date_str, "%d.%m.%Y:%H.%M")
-
-    return dt.hour == opening
+    return date_dt.hour == opening
 
 def is_friday_last_hour(dt):
     #define global variables

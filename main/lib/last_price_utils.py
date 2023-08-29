@@ -2,9 +2,9 @@ from lambda_invokers.ReadDynamoDB_invoker import ReadDynamoDB_invoker
 from lib.date_utils import get_one_hour_less, get_opening_dt
 import json
 
-def get_previous_prices(date_str: str):
+def get_previous_prices(date_dt):
     
-    previous_date = get_one_hour_less(date_str)
+    previous_date = get_one_hour_less(date_dt)
     
     #gets last entries
     last_entry_blue = ReadDynamoDB_invoker(table_name="blue_prices", dt=previous_date)
@@ -22,9 +22,9 @@ def get_previous_prices(date_str: str):
     return last_price_blue, last_price_usdt
 
 
-def get_emojis(date_str: str, current_price_usdt: int, current_price_blue: int):
+def get_emojis(date_dt, current_price_usdt: int, current_price_blue: int):
 
-    last_price_blue, last_price_usdt = get_previous_prices(date_str=date_str)
+    last_price_blue, last_price_usdt = get_previous_prices(date_dt)
     
     emoji_blue: str
     emoji_usdt: str
@@ -44,8 +44,8 @@ def get_closing_emoji(opening: float, closing:float):
     elif closing > opening: return "📈"
     else: return "🟰"
 
-def get_blue_opening_value(date_str: str):
-    opening_dt = get_opening_dt(date_str)
+def get_blue_opening_value(date_dt):
+    opening_dt = get_opening_dt(date_dt)
     opening_value = ReadDynamoDB_invoker("blue_prices", opening_dt)["Item"]["price"]
     return opening_value
     
