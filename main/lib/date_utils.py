@@ -1,12 +1,12 @@
 import datetime
-import pytz
+from dateutil import tz
 from constants import OPENING, CLOSING
 
 def get_formatted_date():
     # This function returns the rounded actual time 
     # with the format used throughout all the backend for datetime strings
     
-    now = datetime.datetime.now(tz=pytz.timezone("America/Argentina/Buenos Aires"))
+    now = datetime.datetime.now(tz=tz.gettz("America/Argentina/Buenos Aires"))
     rounded_now = now.replace(minute=0, second=0, microsecond=0)
     
     date_str = rounded_now.strftime("%d.%m.%Y:%H.%M")
@@ -94,7 +94,7 @@ def holiday(date_dt):
         holidays[i] = datetime.datetime.strptime(holidays[i], "%d.%m.%Y:%H.%M").replace(
                                                                                 second=0, 
                                                                                 microsecond=0, 
-                                                                                tzinfo=pytz.timezone("America/Argentina/Buenos_Aires"))
+                                                                                tzinfo=tz.gettz("America/Argentina/Buenos_Aires"))
     
     # check if current date is a holiday
     return date_dt in holidays

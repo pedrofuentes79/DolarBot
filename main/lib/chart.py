@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 from io import BytesIO
 from datetime import datetime as dt
 from lib.get_chart_data import get_weekly_data, get_monthly_data
-import pytz
+from dateutil import tz
 from date_utils import get_month_spanish
 from constants import OPENING, CLOSING
 
@@ -11,7 +11,7 @@ def get_weekly_chart(data):
     # sort the data by timestamp
     data.sort(key=lambda x: x["unix_date"])
 
-    dates = [dt.fromtimestamp(x["unix_date"], tz=pytz.timezone('America/Argentina/Buenos_Aires')) for x in data]
+    dates = [dt.fromtimestamp(x["unix_date"], tz=tz.gettz('America/Argentina/Buenos_Aires')) for x in data]
     dates_formatted = [x.strftime("%A %H:%M") for x in dates]
     prices = [float(x["price"]) for x in data]
     
@@ -45,13 +45,13 @@ def get_monthly_chart(data):
     # sort the data by timestamp
     data.sort(key=lambda x: x["unix_date"])
 
-    dates = [dt.fromtimestamp(x["unix_date"], tz=pytz.timezone('America/Argentina/Buenos_Aires')) for x in data]
+    dates = [dt.fromtimestamp(x["unix_date"], tz=tz.gettz('America/Argentina/Buenos_Aires')) for x in data]
     dates_formatted = [x.strftime("%d") for x in dates]
     prices = [float(x["price"]) for x in data]
 
     mes = get_month_spanish(dates[0])
     
-    x_ticks = [date.strftime("%d") for date in dates if (date.hour == CLOSING)]
+    x_ticks = [date.strftime("%d") for date in dates if (date.hour == OPENING)]
     
     plt.plot(dates_formatted, prices)
     plt.xticks(x_ticks, rotation=45)
