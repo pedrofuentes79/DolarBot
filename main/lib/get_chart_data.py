@@ -6,7 +6,9 @@ def get_weekly_data(table_name, date_friday):
     dynamodb = boto3.resource('dynamodb', region_name="us-east-2")
     table = dynamodb.Table(table_name)
 
-    date_monday = date_friday.replace(day=date_friday.day-4, hour=OPENING, minute=0, second=0, microsecond=0)
+    # Substract 4 days to reach monday. Can't use replace method, it fails on first days of the month.
+    date_monday = date_friday - dt.timedelta(days=4)
+    date_monday = date_monday.replace(hour=OPENING, minute=0, second=0, microsecond=0)
     
     # Get the timestamp (unix date)
     start_timestamp = int(date_monday.timestamp())
