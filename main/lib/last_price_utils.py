@@ -10,9 +10,13 @@ def get_previous_prices(date_dt):
     # Gets entries from previous market hour
     last_entry_blue = ReadDynamoDB_invoker(table_name="blue_prices", dt=previous_date)
     last_entry_usdt = ReadDynamoDB_invoker(table_name="usdt_prices", dt=previous_date)
-    
-    last_price_blue = float(last_entry_blue["Item"]["price"])
-    last_price_usdt = float(last_entry_usdt["Item"]["price"])
+
+    try:
+        last_price_blue = float(last_entry_blue["Item"]["price"])
+        last_price_usdt = float(last_entry_usdt["Item"]["price"])
+    except KeyError:
+        last_price_blue = 0
+        last_price_usdt = 0
     
     return last_price_blue, last_price_usdt
 
