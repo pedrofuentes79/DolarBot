@@ -25,56 +25,47 @@ def get_one_hour_less(date_dt):
     # This function assumes the date_dt is a datetime object with tzinfo.
     # It also assumes the minutes, seconds and microseconds in the date_dt will be 0.
     
-    if date_dt.hour == OPENING:
-        # Case monday at opening time
-        if date_dt.weekday() == 0:
-            # Substract two days (to make it friday) and the hours required to make it closing time
-            output_time = date_dt - datetime.timedelta(days=2, hours=OPENING-CLOSING+24)
+    hour = date_dt.hour
+    weekday = date_dt.weekday()
 
-        # Case Tuesday, Wednesday, Thursday, Friday at opening time
-        else:
-            # Substract the difference needed to reach the previous day's closing time
-            output_time = date_dt - datetime.timedelta(hours=OPENING-CLOSING+24)
-            
-    # Cases outside of market hours
-    # Case before opening time
-    elif date_dt.hour < OPENING:
-        #Case Monday
-        if date_dt.weekday() == 0:
-            # substract three days (to make it friday) and set hours to closing time
-            output_time = date_dt.replace(hour=CLOSING) - datetime.timedelta(days=3)
+    # Case saturday
+    if weekday == 5:
+        # Substract one day and set the hour to closing time
+        output_time = (date_dt - datetime.timedelta(days=1)).replace(hour=CLOSING)
+    # Case sunday
+    elif weekday == 6:
+        # Substract two days and set the hour to closing time
+        output_time = (date_dt - datetime.timedelta(days=2)).replace(hour=CLOSING)
 
-        # Case Tuesday, Wednesday, Thursday, Friday, Saturday
-        elif date_dt.weekday() <= 5:
-            # substract one day and set hours to closing time
-            output_time = date_dt.replace(hour=CLOSING) - datetime.timedelta(days=1)
-
-        # Case Sunday
-        else:
-            # substract two days (to make it friday) and set hours to closing time
-            output_time = date_dt.replace(hour=CLOSING) - datetime.timedelta(days=2)
-
-    elif date_dt.hour > CLOSING:
-
-        # Case Monday, Tuesday, Wednesday, Thursday, Friday
-        if date_dt.weekday() <= 4:
-            # replace hours with closing time
+    # Case monday
+    elif weekday == 0:
+        # Case before opening time
+        if hour <= OPENING:
+            # Substract three days and set the hour to closing time
+            output_time = (date_dt - datetime.timedelta(days=3)).replace(hour=CLOSING)
+        # Case after closing time
+        elif hour > CLOSING:
+            # Set the hour to closing time
             output_time = date_dt.replace(hour=CLOSING)
-
-        # Case Saturday
-        elif date_dt.weekday() == 5:
-            # substract one day and set hours to closing time
-            output_time = date_dt.replace(hour=CLOSING) - datetime.timedelta(days=1)
-
-        # Case Sunday
+        # Case between opening and closing time
         else:
-            # substract two days (to make it friday) and set hours to closing time
-            output_time = date_dt.replace(hour=CLOSING) - datetime.timedelta(days=2)
-
-    # Case within market hours
+            # Substract one hour
+            output_time = date_dt - datetime.timedelta(hours=1)
+    
+    # Case tuesday, wednesday, thursday or friday
     else:
-        # Subtract one hour from the input time
-        output_time = date_dt - datetime.timedelta(hours=1)
+        # Case before opening time
+        if hour <= OPENING:
+            # Substract one day and set the hour to closing time
+            output_time = (date_dt - datetime.timedelta(days=1)).replace(hour=CLOSING)
+        # Case after closing time
+        elif hour > CLOSING:
+            # Set the hour to closing time
+            output_time = date_dt.replace(hour=CLOSING)
+        # Case between opening and closing time
+        else:
+            # Substract one hour
+            output_time = date_dt - datetime.timedelta(hours=1)
     
     return output_time
     
