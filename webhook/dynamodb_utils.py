@@ -1,14 +1,14 @@
 import boto3
 import datetime
 from dateutil import tz
-from send_message import send_error_message
+from send_message import send_message
 
 def get_price_data(date_str, chat_id):
     try:
         dt = datetime.datetime.strptime(date_str, "%d/%m/%y")
     except:
         example_dt_str = datetime.datetime.now().strftime("%d/%m/%y")
-        send_error_message("Por favor, chequee el formato de la fecha. Para el día de hoy debería ser así: " + example_dt_str, chat_id)
+        send_message("Por favor, chequee el formato de la fecha. Para el día de hoy debería ser así: " + example_dt_str, chat_id)
         return None
     
     
@@ -30,12 +30,16 @@ def get_price_data(date_str, chat_id):
         },
         ConsistentRead=True
     )
-    
-    data = response["Items"]
-    data.sort(key=lambda x: x["unix_date"])
-    
-    #get opening and closing price
-    opening_price = data[0]["price"]
-    closing_price = data[-1]["price"]
-    
-    return (opening_price, closing_price)
+    try:
+        data = response["Items"]
+        data.sort(key=lambda x: x["unix_date"])
+        
+        print(data[0])
+        #get opening and closing price
+        opening_price = data[0]["price"]
+        closing_price = data[-1]["price"]
+        
+        return (opening_price, closing_price)
+    except:
+        send_message("La base de datos no tiene información para esa fecha", chat_id)
+        return None
