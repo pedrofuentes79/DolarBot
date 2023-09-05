@@ -22,12 +22,14 @@ def lambda_handler(event, context):
 
     command = command[1:] # Strips "/" character
     
+    commands_dict = json.load(open('commands.json', 'r'))
+
     if command == 'start':
-        send_message("Welcome to my bot! How can I help you today?", chat_id)
+        send_message(commands_dict["start"], chat_id)
         return {'statusCode': 200, 'body': json.dumps("Start command")} 
         
     elif command == 'help':
-        send_message("Here are the available commands: /start, /help", chat_id)
+        send_message(commands_dict["help"], chat_id)
         return {'statusCode': 200, 'body': json.dumps("Help offered")} 
 
     elif command.startswith("precio"):
@@ -42,7 +44,7 @@ def lambda_handler(event, context):
         return {'statusCode': 200, 'body': json.dumps('Prices sent to ' + chat_id)} 
         
     else:
-        send_message("I don't recognize that command. Type /help", chat_id)
+        send_message(commands_dict["error"], chat_id)
         return {'statusCode': 200, 'body': json.dumps("Help offered")} 
     
     return {'statusCode': 200, 'body': json.dumps("Something happened. The function didn't enter in any command")} 

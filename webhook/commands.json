@@ -1,0 +1,5 @@
+{
+    "help": "Estos son los comandos disponibles. \n /start: Saluda al usuario \n /help: Muestra este mensaje \n /precio día/mes/año \n Este comando muestra el precio del dólar blue en la fecha dada. La fecha es del tipo 5/9/23, siendo 5 el día del mes, 9 el número de mes y 23 el año.",
+    "start": "Hola! Bienvenido a DolarBot. Puedes escribir /help para ver los comandos disponibles",
+    "error": "I don't recognize that command. Type /help"
+}
