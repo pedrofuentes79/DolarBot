@@ -28,13 +28,15 @@ DolarBot depende de las siguientes librerías de Python:
 
 ## Uso
 
-Para recibir los últimos precios de las divisas y actualizaciones, puedes unirte al canal de DolarBot en Telegram siguiendo este enlace: [Canal de DolarBot](https://t.me/PrecioDolarBlue).
+- Para recibir los últimos precios de las divisas y actualizaciones, puedes unirte al canal de DolarBot en Telegram siguiendo este enlace: [Canal de DolarBot](https://t.me/PrecioDolarBlue).
+
+- Para consultar el precio de una fecha específica, puedes enviar un mensaje directo al bot siguiendo este enlace: [DolarBot](https://t.me/DolarScraper_Bot).
 
 ## Implementación
 
 El bot se puede implementar de varias formas. Una opción es ejecutar el script `main.py` periódicamente como un cronjob. Para hacer esto, se debería modificar el código para manejar adecuadamente las consultas a la base de datos.
 
-Como alternativa, puedes implementarlo como una función AWS Lambda para ejecutarlo periódicamente. Esta es la implementación que elegí debido a su facilidad de uso.
+Como alternativa, puedes implementarlo como una función AWS Lambda para ejecutarlo periódicamente. Esta es la implementación que elegí debido a su facilidad de uso. En el caso del webhook, lo configuré como otra función AWS Lambda que se "activa" cuando el bot recibe un mensaje.
 
 El usuario es libre de explorar y ampliar la funcionalidad del bot agregando más valores de divisas, como la cotización oficial, "Dólar Bolsa", "Dólar MEP", etc., según las necesidades específicas.
 

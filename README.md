@@ -9,6 +9,8 @@ DolarBot is a simple Telegram bot that provides hourly information about currenc
 - Sends users a short message with the latest currency values.
 - Compares previous prices with current ones with an emoji embedded in the message.
 
+- Allows users to check (via direct message) the currency value of any given date.
+
 ## APIs
 
 DolarBot utilizes the following APIs:
@@ -28,13 +30,15 @@ DolarBot relies on the following Python packages:
 
 ## Usage
 
-To receive the latest currency prices and updates, you can join the DolarBot channel on Telegram by following this link: [DolarBot Channel](https://t.me/PrecioDolarBlue). 
+- To receive the hourly currency prices and updates, you can join the DolarBot channel on Telegram by following this link: [DolarBot Channel](https://t.me/PrecioDolarBlue). 
+
+- To ask for the price of a specific date, you can send a direct message to the bot by following this link: [DolarBot](https://t.me/DolarScraper_Bot).
 
 ## Deployment
 
 The bot can be deployed in multiple ways. One option is to run the `main.py` script periodically as a cron job. In order to do this, one would need to modify the code to handle database queries properly.
 
-Alternatively, you can deploy it as an AWS Lambda function to run it periodically. This is the implementation I chose due to ease of use.
+Alternatively, you can deploy it as an AWS Lambda function to run it periodically. This is the implementation I chose due to ease of use. In the case of the webhook, I set it up as a separate AWS Lambda function that gets "triggered" when the bot receives a message.
 
 Feel free to explore and extend the functionality of the bot by adding more currency values, such as the official exchange rate, "Dólar Bolsa", "Dólar MEP", etc. based on your specific requirements.
 
