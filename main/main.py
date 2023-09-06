@@ -1,17 +1,20 @@
+import os
+os.environ['MPLCONFIGDIR'] = '/tmp/matplotlib'
+
+import json
+from datetime import datetime as dt
+from dateutil import tz
+
+from lambda_invokers.WriteDynamoDB_invoker import WriteDynamoDB_invoker
 from lib.get_blue import get_blue
+from lib.get_p2p_ars_price import get_p2p_ars_price
 from lib.date_utils import get_formatted_date, holiday, is_friday_last_hour, is_end_month
 from lib.send_message import send_message, send_chart
-from lib.get_p2p_ars_price import get_p2p_ars_price
 from lib.chart import get_weekly_chart, get_monthly_chart
 from lib.get_chart_data import get_weekly_data, get_monthly_data
 
-from lambda_invokers.WriteDynamoDB_invoker import WriteDynamoDB_invoker
-
-import os
-import json
-
 def lambda_handler(event, context):
-    #Keys
+    # Constants
     CHAT_ID = os.environ.get("TELEGRAM_CHANNEL_ID")
     DOLAR_SCRAPER_TOKEN = os.environ.get("TELEGRAM_API_DOLAR_SCRAPER_TOKEN")
     
