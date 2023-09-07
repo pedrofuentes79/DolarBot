@@ -48,7 +48,7 @@ def get_price_data(date_str, chat_id):
         return None
         
     
-def get_today_price(chat_id):
+def get_today_price():
     buy_blue, sell_blue = get_blue()
     usdt = get_p2p_ars_price(mercado_pago=True)
     

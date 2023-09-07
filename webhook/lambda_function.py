@@ -33,7 +33,7 @@ def lambda_handler(event, context):
         
     # Caso precio de hoy
     elif command in ["precio", "precio hoy", "precio ", "precio blue", "precio blue hoy", "/precio", "/precio hoy"]:
-        blue, usdt = get_today_price(chat_id)
+        blue, usdt = get_today_price()
         
         send_current_prices(blue, usdt, chat_id)
         return {'statusCode': 200, 'body': json.dumps('Current prices sent to ' + chat_id)} 
