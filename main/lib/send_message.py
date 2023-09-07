@@ -4,13 +4,12 @@ from lib.date_utils import get_message_formatted_date, is_opening_time, is_closi
 
 def send_message(blue, usdt, date_dt, chat_id, token):
     # This function sends a message to the telegram channel with the given chat_id and token.
-
-    # Gets specific format for current date
-    message_formatted_date = get_message_formatted_date(date_dt)
     
     # Initialize values
     if is_opening_time(date_dt):
-        msg = "APERTURA " + message_formatted_date +"\n"
+        # Gets specific format for current date
+        message_formatted_date = get_message_formatted_date(date_dt)
+        msg = "APERTURA " + message_formatted_date + "\n"
     else:
         msg = ""
     
