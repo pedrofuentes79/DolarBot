@@ -1,8 +1,10 @@
 import json
 import os
 import requests
-from dynamodb_utils import get_price_data
-from send_message import send_message_prices, send_message
+import datetime
+
+from prices import get_price_data, get_today_price
+from send_message import send_message_prices, send_message, send_current_prices
 
 def lambda_handler(event, context):
     # Get the "dict" that has all info
@@ -17,35 +19,37 @@ def lambda_handler(event, context):
     else:
         return {'statusCode': 400, 'body': json.dumps("Did not recognize a message")} 
     
-    # Constants
-    TOKEN = os.environ.get('TELEGRAM_API_DOLAR_SCRAPER_TOKEN')
-
-    command = command[1:] # Strips "/" character
-    
     commands_dict = json.load(open('commands.json', 'r'))
-
-    if command == 'start':
+    
+    command = command.lower() # lowercases the command
+    
+    if command == "start":
         send_message(commands_dict["start"], chat_id)
         return {'statusCode': 200, 'body': json.dumps("Start command")} 
         
-    elif command == 'help':
+    elif command in ["help", "ayuda", "/help", "/ayuda"]:
         send_message(commands_dict["help"], chat_id)
         return {'statusCode': 200, 'body': json.dumps("Help offered")} 
+        
+    # Caso precio de hoy
+    elif command in ["precio", "precio hoy", "precio ", "precio blue", "precio blue hoy", "/precio", "/precio hoy"]:
+        blue, usdt = get_today_price(chat_id)
+        
+        send_current_prices(blue, usdt, chat_id)
+        return {'statusCode': 200, 'body': json.dumps('Current prices sent to ' + chat_id)} 
 
-    elif command.startswith("precio"):
-        date_str = command[7:]
+    elif command.startswith("precio "):
+        date_str = command[6:]
         
         response_prices = get_price_data(date_str, chat_id)
         
         if response_prices:
             opening, closing = response_prices
             send_message_prices(date_str, opening, closing, chat_id)
-        
-        return {'statusCode': 200, 'body': json.dumps('Prices sent to ' + chat_id)} 
+            return {'statusCode': 200, 'body': json.dumps('Prices sent to ' + chat_id)} 
+        else:
+            return {'statusCode': 400, 'body': json.dumps('Did not find prices or date was wrong')} 
         
     else:
         send_message(commands_dict["error"], chat_id)
         return {'statusCode': 200, 'body': json.dumps("Help offered")} 
-    
-    return {'statusCode': 200, 'body': json.dumps("Something happened. The function didn't enter in any command")} 
-
