@@ -28,7 +28,20 @@ def get_weekly_chart(data):
     # Shades the area below the curve and plots the curve
     plt.fill_between(dates_formatted, prices, color="skyblue", alpha=0.4)
     plt.plot(dates_formatted, prices, color="Slateblue", alpha=0.6, linewidth=2)
-    
+
+    # Add the percentage change annotation
+    percentage_change = round(((prices[-1] - prices[0]) / prices[0]) * 100, 2)
+    annotation_text = ("Aumento " if percentage_change > 0 else "Disminución ") + "semanal: " + str(percentage_change) + "%"
+
+    bbox_props = dict(boxstyle='round, pad=0.4', edgecolor='skyblue', facecolor='lightblue')
+
+    plt.text(0.05, 0.9, annotation_text, transform=plt.gca().transAxes, fontsize=12, verticalalignment='top', bbox=bbox_props)
+
+    # Add the price annotation
+    for date, price in zip(dates_formatted, prices):
+        plt.annotate(f'${price:.2f}', (date, price), textcoords="offset points", xytext=(0, 10), ha='center')
+
+    # Set the plot's limits, labels and title
     plt.ylim(min(prices) * 0.9, max(prices) * 1.05)
     plt.xlabel("Día")
     plt.ylabel("Dólar Blue")
@@ -67,7 +80,16 @@ def get_monthly_chart(data):
     # Shades the area below the curve and plots the curve
     plt.fill_between(dates_formatted, prices, color="skyblue", alpha=0.4)
     plt.plot(dates_formatted, prices, color="Slateblue", alpha=0.6, linewidth=2)
-    
+
+    # Add the percentage change annotation
+    percentage_change = round(((prices[-1] - prices[0]) / prices[0]) * 100, 2)
+    annotation_text = ("Aumento " if percentage_change > 0 else "Disminución") + "mensual: " + str(percentage_change) + "%"
+
+    bbox_props = dict(boxstyle='round, pad=0.4', edgecolor='skyblue', facecolor='lightblue')
+
+    plt.text(0.05, 0.9, annotation_text, transform=plt.gca().transAxes, fontsize=12, verticalalignment='top', bbox=bbox_props)
+
+    # Set the plot's limits, labels and title
     plt.ylim(min(prices) * 0.8, max(prices) * 1.05)
     plt.xlabel("Día")
     plt.ylabel("Dólar Blue")
