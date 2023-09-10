@@ -1,5 +1,5 @@
 import boto3
-from datetime import datetime as dt
+import datetime
 from constants import OPENING, CLOSING
 
 def get_weekly_data(table_name, date_friday):
@@ -7,7 +7,7 @@ def get_weekly_data(table_name, date_friday):
     table = dynamodb.Table(table_name)
 
     # Substract 4 days to reach monday. Can't use replace method, it fails on first days of the month.
-    date_monday = date_friday - dt.timedelta(days=4)
+    date_monday = date_friday - datetime.timedelta(days=4)
     date_monday = date_monday.replace(hour=OPENING, minute=0, second=0, microsecond=0)
     
     # Get the timestamp (unix date)

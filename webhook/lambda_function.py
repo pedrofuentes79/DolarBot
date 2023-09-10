@@ -18,12 +18,12 @@ def lambda_handler(event, context):
         chat_id = str(request_body['edited_message']['chat']['id'])
     else:
         return {'statusCode': 400, 'body': json.dumps("Did not recognize a message")} 
-    
+
     commands_dict = json.load(open('commands.json', 'r'))
     
     command = command.lower() # lowercases the command
     
-    if command == "start":
+    if command in ["start", "/start"]:
         send_message(commands_dict["start"], chat_id)
         return {'statusCode': 200, 'body': json.dumps("Start command")} 
         
@@ -34,10 +34,10 @@ def lambda_handler(event, context):
     # Caso precio de hoy
     elif command in ["precio", "precio hoy", "precio ", "precio blue", "precio blue hoy", "/precio", "/precio hoy"]:
         blue, usdt = get_today_price()
-        
-        send_current_prices(blue, usdt, chat_id)
-        return {'statusCode': 200, 'body': json.dumps('Current prices sent to ' + chat_id)} 
 
+        send_current_prices(blue, usdt, chat_id)
+        return {'statusCode': 200, 'body': json.dumps('Current prices sent to ' + chat_id)}
+        
     elif command.startswith("precio "):
         date_str = command[6:]
         
@@ -53,3 +53,4 @@ def lambda_handler(event, context):
     else:
         send_message(commands_dict["error"], chat_id)
         return {'statusCode': 200, 'body': json.dumps("Help offered")} 
+        
