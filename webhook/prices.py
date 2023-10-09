@@ -9,14 +9,13 @@ from send_blue_price.get_p2p_ars_price_modified import get_p2p_ars_price
 def get_price_data(date_str, chat_id):
     try:
         dt = datetime.datetime.strptime(date_str, "%d/%m/%y")
-    except TypeError:
+    except ValueError:
         try:
             dt = datetime.datetime.strptime(date_str, "%d/%m/%Y")
-        except TypeError:
+        except ValueError:
             example_dt_str = datetime.datetime.now().strftime("%d/%m/%y")
-            send_message("Por favor, chequee el formato de la fecha. Para el día de hoy debería ser así: " + example_dt_str, chat_id)
+            send_message("Por favor, chequee el formato de la fecha!! Para el día de hoy debería ser así: " + example_dt_str, chat_id)
             return None
-    
     
     mytz = tz.gettz("America/Argentina/Buenos_Aires")
     dt_timestamp_00 = int(dt.replace(hour=0, tzinfo=mytz).timestamp())

@@ -8,7 +8,7 @@ def send_message(message, chat_id):
     
     url = 'https://api.telegram.org/bot' + TOKEN + '/sendMessage?chat_id=' + chat_id + '&parse_mode=HTML&text=' + message
     response = requests.get(url)
-    print(response)
+    print("message response:", response)
 
 def send_message_prices(date_str, opening, closing, chat_id):
     TOKEN = os.environ.get("TELEGRAM_API_DOLAR_SCRAPER_TOKEN")
@@ -18,7 +18,7 @@ def send_message_prices(date_str, opening, closing, chat_id):
 
     url = 'https://api.telegram.org/bot' + TOKEN + '/sendMessage?chat_id=' + chat_id + '&parse_mode=HTML&text=' + message
     response = requests.get(url)
-    return response
+    print("prices message response:", response)
 
 def send_current_prices(blue, usdt, chat_id):
     TOKEN = os.environ.get("TELEGRAM_API_DOLAR_SCRAPER_TOKEN")
@@ -29,4 +29,4 @@ def send_current_prices(blue, usdt, chat_id):
     
     url = "https://api.telegram.org/bot" + TOKEN + "/sendMessage?chat_id=" + chat_id + "&parse_mode=Markdown&text=" + message
     response = requests.get(url).json()
-    return response
+    print("current prices message response:", response)

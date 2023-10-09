@@ -1,7 +1,4 @@
 import json
-import os
-import requests
-import datetime
 
 from prices import get_price_data, get_today_price
 from send_message import send_message_prices, send_message, send_current_prices
@@ -32,25 +29,25 @@ def lambda_handler(event, context):
         return {'statusCode': 200, 'body': json.dumps("Help offered")} 
         
     # Caso precio de hoy
-    elif command in ["precio", "precio hoy", "precio ", "precio blue", "precio blue hoy", "/precio", "/precio hoy"]:
+    elif command in ["precio", "precio hoy", "precio blue", "precio blue hoy", "/precio", "/precio hoy"]:
+        print("checking current price...")
         blue, usdt = get_today_price()
-
         send_current_prices(blue, usdt, chat_id)
         return {'statusCode': 200, 'body': json.dumps('Current prices sent to ' + chat_id)}
-        
+    # Caso precio anterior
     elif command.startswith("precio "):
-        date_str = command[6:]
+        print("checking old price...")
+        date_str = command[7:]
+        print(date_str)
         
         response_prices = get_price_data(date_str, chat_id)
         
-        if response_prices:
+        if response_prices is not None:
             opening, closing = response_prices
             send_message_prices(date_str, opening, closing, chat_id)
             return {'statusCode': 200, 'body': json.dumps('Prices sent to ' + chat_id)} 
         else:
-            return {'statusCode': 400, 'body': json.dumps('Did not find prices or date was wrong')} 
-        
+            return {'statusCode': 400, 'body': json.dumps('Did not find prices or date was wrong')}    
     else:
         send_message(commands_dict["error"], chat_id)
         return {'statusCode': 200, 'body': json.dumps("Help offered")} 
-        
