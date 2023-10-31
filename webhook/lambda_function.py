@@ -1,5 +1,6 @@
 import json
 
+
 from prices import get_price_data, get_today_price
 from send_message import send_message_prices, send_message, send_current_prices
 
@@ -31,8 +32,8 @@ def lambda_handler(event, context):
     # Caso precio de hoy
     elif command in ["precio", "precio hoy", "precio blue", "precio blue hoy", "/precio", "/precio hoy"]:
         print("checking current price...")
-        blue, usdt = get_today_price()
-        send_current_prices(blue, usdt, chat_id)
+        blue, mep, usdt = get_today_price()
+        send_current_prices(blue, usdt, mep, chat_id)
         return {'statusCode': 200, 'body': json.dumps('Current prices sent to ' + chat_id)}
     # Caso precio anterior
     elif command.startswith("precio "):
